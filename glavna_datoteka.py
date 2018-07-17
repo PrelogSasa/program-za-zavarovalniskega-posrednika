@@ -69,6 +69,7 @@ class Nezgodno_zavarovanje:
             for vrstica in osebe:
                 baza_oseb.write(vrstica)
 
+
         
 ##Domen = Stranka('Maja', 'Kos', 19)
 ##Zavarovanje2= Nezgodno_zavarovanje(10, 'velik')
