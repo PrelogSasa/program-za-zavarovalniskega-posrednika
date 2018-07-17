@@ -30,6 +30,7 @@ class Nezgodno_zavarovanje:
             številka_zavarovanja_večja = int(self.številka) + 1
             številka_zavarovanja_string = str(številka_zavarovanja_večja).zfill(6)
             dat.write(številka_zavarovanja_string)
+            
 
     def _str_(self):
         return 'Nezgodno zavarovanje št. {}, lastnik: {}'.format(self.številka, self.lastnik)
