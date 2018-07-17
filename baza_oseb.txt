@@ -1,3 +1,5 @@
-Maja, Kos, 19: 000000, 000001, 000002, 000009, 000011
-Domen, Grzin, 80: 000003, 000004
-Kaj, Delas, 40: 000008, 000010, 000012
+Taja, Pivka, 35: 000005, 000007, 000008
+Sandi, Gorenjc, 40: 000006
+Maja, Kos, 20: 000009, 000010
+Vladimir, Putin, 60: 000011
+Sandra, Bullock, 50: 000012

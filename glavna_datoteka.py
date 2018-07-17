@@ -52,7 +52,11 @@ class Nezgodno_zavarovanje:
             return 'Vaše letno plačilo je {}'.format(plačilo)
 
     def ustvari_zavarovanje(self):
-        #ustvari oz dodaj v datoteko zavarovanje
+        #ustvari oz. dodaj v datoteko sklenjena zavarovanje
+        with open('sklenjena_zavarovanja.txt', 'a') as sklenjena_zavarovanja:
+            sklenjena_zavarovanja.write('{}: Nezgodno zavarovanje, {}, {}, {}, {} {}\n'.format(self.številka, self.trajanje, self.paket, self.premija, self.lastnik.ime, self.lastnik.priimek))
+        
+        #ustvari novo oz. dodaj v bazo oseb
         with open('baza_oseb.txt', 'a') as baza_oseb:
             pass
         with open('baza_oseb.txt') as baza_oseb:
@@ -64,20 +68,22 @@ class Nezgodno_zavarovanje:
                 lastnika_ni_v_bazi = False
                 break
         if lastnika_ni_v_bazi:
-            osebe += ['{}, {}, {}: {}'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.starost, self.številka)]
+            osebe += ['{}, {}, {}: {}\n'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.starost, self.številka)]
         with open('baza_oseb.txt', 'w') as baza_oseb:
             for vrstica in osebe:
                 baza_oseb.write(vrstica)
 
+    #funkcija ki ustvari dokument za sprintat stranki
+
 
         
-##Domen = Stranka('Maja', 'Kos', 19)
-##Zavarovanje2= Nezgodno_zavarovanje(10, 'velik')
-##Zavarovanje2.nastavi_lastnika(Domen)
+##Maja = Stranka('Vladimir', 'Putin', 60)
+##Zavarovanje2= Nezgodno_zavarovanje(5, 'majhen')
+##Zavarovanje2.nastavi_lastnika(Maja)
 ##Zavarovanje2.nastavi_premijo('letno')
 ##Zavarovanje2.ustvari_zavarovanje()
-##Domen = Stranka('Kaj', 'Delas', 40)
-##Zavarovanje2= Nezgodno_zavarovanje(10, 'velik')
+##Domen = Stranka('Sandra', 'Bullock', 50)
+##Zavarovanje2= Nezgodno_zavarovanje(10, 'majhen')
 ##Zavarovanje2.nastavi_lastnika(Domen)
 ##Zavarovanje2.nastavi_premijo('letno')
 ##Zavarovanje2.ustvari_zavarovanje()

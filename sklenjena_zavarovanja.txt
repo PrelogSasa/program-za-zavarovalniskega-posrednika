@@ -1,0 +1,8 @@
+000005: Nezgodno zavarovanje, 5, majhen, 712.5, Taja Pivka
+000006: Nezgodno zavarovanje, 10, majhen, 1275.0, Sandi Gorenjc
+000007: Nezgodno zavarovanje, 5, majhen, 712.5, Taja Pivka
+000008: Nezgodno zavarovanje, 10, majhen, 1275.0, Taja Pivka
+000009: Nezgodno zavarovanje, 5, majhen, 712.5, Maja Kos
+000010: Nezgodno zavarovanje, 10, majhen, 1275.0, Maja Kos
+000011: Nezgodno zavarovanje, 5, majhen, 712.5, Vladimir Putin
+000012: Nezgodno zavarovanje, 10, majhen, 1275.0, Sandra Bullock
