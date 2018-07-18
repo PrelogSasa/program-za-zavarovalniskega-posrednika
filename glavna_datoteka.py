@@ -1,17 +1,20 @@
-DANAŠNJI_DATUM = '5.5.2017'
+DANAŠNJI_DATUM = '5.7.2018'
+#pogrunti kko dobit današnji datum
 
 
 class Stranka:
-    def __init__(self, ime, priimek, starost):
+    def __init__(self, ime, priimek, datum_rojstva):
         self.ime = ime
         self.priimek = priimek
-        self.starost = starost
+        self.datum_rojstva = datum_rojstva
+        self.starost = int(DANAŠNJI_DATUM[-4:]) - int(self.datum_rojstva[-4:])
+        
 
     def __repr__(self):
-        return 'Stranka({}, {}, {})'.format(self.ime, self.priimek, self.starost)
+        return 'Stranka({}, {}, {})'.format(self.ime, self.priimek, self.datum_rojstva)
 
     def __str__(self):
-        return '{} {}, starost: {}'.format(self.ime, self.priimek, self.starost)
+        return '{} {}, rojen/a: {}'.format(self.ime, self.priimek, self.datum_rojstva)
 
 
 class Nezgodno_zavarovanje:
@@ -63,26 +66,34 @@ class Nezgodno_zavarovanje:
             osebe = baza_oseb.readlines()
         lastnika_ni_v_bazi = True
         for i in range(len(osebe)):
-            if osebe[i].startswith('{}, {}, {}'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.starost)):
+            if osebe[i].startswith('{}, {}, {}'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.datum_rojstva)):
                 osebe[i] = osebe[i].strip() + ', {}\n'.format(self.številka)
                 lastnika_ni_v_bazi = False
                 break
         if lastnika_ni_v_bazi:
-            osebe += ['{}, {}, {}: {}\n'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.starost, self.številka)]
+            osebe += ['{}, {}, {}: {}\n'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.datum_rojstva, self.številka)]
         with open('baza_oseb.txt', 'w') as baza_oseb:
             for vrstica in osebe:
                 baza_oseb.write(vrstica)
 
-    #funkcija ki ustvari dokument za sprintat stranki
+    def ustvari_dokument(self):
+        with open('Nezgodno_zavarovanje_št_{}.txt'.format(self.številka), 'w') as doc:
+            print('POLICA ZA NEZGODNO ZAVAROVANJE\n', file=doc)
+            print('Polica št. {}\n'.format(self.številka), file=doc)
+            print('PODATKI O ZAVAROVALCU/ ZAVAROVANCU', file=doc)
+            print('Ime in priimek: {} {}'.format(self.lastnik.ime, self.lastnik.priimek), file=doc)
+            print('Datum rojstva: {}'.format(self.lastnik.datum_rojstva), file=doc)
+            
+            
+            
+            
 
-
-        
-##Maja = Stranka('Vladimir', 'Putin', 60)
-##Zavarovanje2= Nezgodno_zavarovanje(5, 'majhen')
+##Maja = Stranka('Vladimir', 'Putin', '6.6.1965')
+##Zavarovanje2= Nezgodno_zavarovanje(10, 'velik')
 ##Zavarovanje2.nastavi_lastnika(Maja)
 ##Zavarovanje2.nastavi_premijo('letno')
 ##Zavarovanje2.ustvari_zavarovanje()
-##Domen = Stranka('Sandra', 'Bullock', 50)
+##Domen = Stranka('Vladimir', 'Putin', '6.6.1965')
 ##Zavarovanje2= Nezgodno_zavarovanje(10, 'majhen')
 ##Zavarovanje2.nastavi_lastnika(Domen)
 ##Zavarovanje2.nastavi_premijo('letno')
