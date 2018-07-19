@@ -8,7 +8,7 @@ PAKETI = {'velik': 200, 'majhen': 150}
 
 
 class Stranka:
-    def __init__(self, ime, priimek, datum_rojstva):
+    def nastavi_ime_priimek_detum_rojstva(self, ime, priimek, datum_rojstva):
         self.ime = ime
         self.priimek = priimek
         self.datum_rojstva = datum_rojstva
@@ -23,9 +23,8 @@ class Stranka:
 
 
 class Nezgodno_zavarovanje:
-    def __init__(self, trajanje, paket):
-        self.trajanje = trajanje
-        self.paket = paket
+
+    def nastavi_številko(self):
         self.datum_sklenitve = DANAŠNJI_DATUM()
         with open('številka_zavarovanja.txt') as dat:
             številka_zavarovanja = dat.readline()
@@ -34,7 +33,13 @@ class Nezgodno_zavarovanje:
             številka_zavarovanja_večja = int(self.številka) + 1
             številka_zavarovanja_string = str(številka_zavarovanja_večja).zfill(6)
             dat.write(številka_zavarovanja_string)
-            
+
+    def nastavi_trajanje(self, trajanje):
+        self.trajanje = trajanje
+
+    def nastavi_paket(self, paket):
+        self.paket = paket
+        print(self.paket)
 
     def __str__(self):
         return 'Nezgodno zavarovanje št. {}, lastnik: {}'.format(self.številka, self.lastnik)
@@ -105,7 +110,7 @@ class Nezgodno_zavarovanje:
             print('_________________________', file=doc)
         if sys.platform == 'darwin':
             subprocess.call(['open','Nezgodno_zavarovanje_št_{}.txt'.format(self.številka)])
-        elif sys.platform == 'win32' or sys.platform == 'win64':
+        elif sys.platform == 'win32':
             os.startfile('Nezgodno_zavarovanje_št_{}.txt'.format(self.številka))
         else:
             subprocess.call(['xdg-open','Nezgodno_zavarovanje_št_{}.txt'.format(self.številka)])
