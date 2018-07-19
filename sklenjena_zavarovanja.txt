@@ -1,4 +1,4 @@
-000017: Nezgodno zavarovanje, 10, velik, 1700.0, Vladimir Putin
-000018: Nezgodno zavarovanje, 10, majhen, 1275.0, Vladimir Putin
-000019: Nezgodno zavarovanje, 10, velik, 1700.0, Vladimir Putin
-000020: Nezgodno zavarovanje, 10, majhen, 1275.0, Vladimir Putin
+000000: Nezgodno zavarovanje, 10, velik, letno, 1700.0, Domen Grzin, 19.07.2018
+000001: Nezgodno zavarovanje, 10, majhen, meseèno, 1275.0, Vladimir Putin, 19.07.2018
+000002: Nezgodno zavarovanje, 10, velik, letno, 1700.0, Domen Grzin, 19.07.2018
+000003: Nezgodno zavarovanje, 10, majhen, meseèno, 1275.0, Vladimir Putin, 19.07.2018
