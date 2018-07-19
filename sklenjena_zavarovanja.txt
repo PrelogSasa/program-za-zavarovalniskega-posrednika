@@ -6,3 +6,9 @@
 000005: Nezgodno zavarovanje, 10, velik, letno, 1700.0, Domen Grzin, 19.07.2018
 000006: Nezgodno zavarovanje, 10, velik, letno, 1700.0, Domen Grzin, 19.07.2018
 000007: Nezgodno zavarovanje, 10, velik, letno, 1700.0, Domen Grzin, 19.07.2018
+000008: Nezgodno zavarovanje, 10, velik, letno, 1700.0, Domen Grzin, 19.07.2018
+000009: Nezgodno zavarovanje, 10, velik, meseèno, 1700.0, Vladimir Putin, 19.07.2018
+000010: Nezgodno zavarovanje, 10, velik, letno, 1700.0, Domen Grzin, 19.07.2018
+000011: Nezgodno zavarovanje, 10, velik, meseèno, 1700.0, Vladimir Putin, 19.07.2018
+000012: Nezgodno zavarovanje, 10, velik, letno, 1700.0, Domen Grzin, 19.07.2018
+000013: Nezgodno zavarovanje, 10, velik, meseèno, 1700.0, Vladimir Putin, 19.07.2018

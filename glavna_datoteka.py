@@ -8,7 +8,7 @@ PAKETI = {'velik': 200, 'majhen': 150}
 
 
 class Stranka:
-    def nastavi_ime_priimek_detum_rojstva(self, ime, priimek, datum_rojstva):
+    def nastavi_ime_priimek_datum_rojstva(self, ime, priimek, datum_rojstva):
         self.ime = ime
         self.priimek = priimek
         self.datum_rojstva = datum_rojstva
@@ -39,7 +39,6 @@ class Nezgodno_zavarovanje:
 
     def nastavi_paket(self, paket):
         self.paket = paket
-        print(self.paket)
 
     def __str__(self):
         return 'Nezgodno zavarovanje št. {}, lastnik: {}'.format(self.številka, self.lastnik)
@@ -102,7 +101,7 @@ class Nezgodno_zavarovanje:
             print('{} premija: {:.2f} EUR\n'.format('Mesečna' if self.interval_plačevanja == 'mesečno' else 'Letna', self.plačilo), file=doc)
             print('ZAVAROVALNE VSOTE', file=doc)
             if self.paket == 'velik':
-                print('Smrt: 20 000 EUR\nMesečna renta: 200 EUR\n Invalidnost:150 000 EUR\nNadomestilo za zlom kosti: 3000 EUR\n', file=doc)
+                print('Smrt: 20 000 EUR\nMesečna renta: 200 EUR\nInvalidnost:150 000 EUR\nNadomestilo za zlom kosti: 3000 EUR\n', file=doc)
             else:
                 print('Smrt: 15 000 EUR\nMesečna renta: 100 EUR\nInvalidnost:100 000 EUR\n', file=doc)
             print('Zavarovanec potrjuje, da je prejel pogoje\nzavarovanja in je z njimi tudi seznanjen.\n', file=doc)
@@ -117,15 +116,24 @@ class Nezgodno_zavarovanje:
             
             
 
-##Maja = Stranka('Domen', 'Grzin', '06.06.1998')
-##Zavarovanje1= Nezgodno_zavarovanje(10, 'velik')
+##Maja = Stranka()
+##Maja.nastavi_ime_priimek_datum_rojstva('Domen', 'Grzin', '06.06.1998')
+##Zavarovanje1 = Nezgodno_zavarovanje()
+##Zavarovanje1.nastavi_številko()
+##Zavarovanje1.nastavi_trajanje(10)
+##Zavarovanje1.nastavi_paket('velik')
 ##Zavarovanje1.nastavi_lastnika(Maja)
 ##Zavarovanje1.nastavi_premijo('letno')
 ##Zavarovanje1.ustvari_zavarovanje()
 ##Zavarovanje1.ustvari_dokument()
-##Domen = Stranka('Vladimir', 'Putin', '23.12.1965')
-##Zavarovanje2= Nezgodno_zavarovanje(10, 'majhen')
+##Domen = Stranka()
+##Domen.nastavi_ime_priimek_datum_rojstva('Vladimir', 'Putin', '23.12.1965')
+##Zavarovanje2= Nezgodno_zavarovanje()
+##Zavarovanje2.nastavi_številko()
+##Zavarovanje2.nastavi_trajanje(10)
+##Zavarovanje2.nastavi_paket('velik')
 ##Zavarovanje2.nastavi_lastnika(Domen)
 ##Zavarovanje2.nastavi_premijo('mesečno')
 ##Zavarovanje2.ustvari_zavarovanje()
 ##Zavarovanje2.ustvari_dokument()
+##
