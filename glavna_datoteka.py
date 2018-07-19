@@ -1,3 +1,4 @@
+import subprocess, os, sys
 import datetime
 def DANAŠNJI_DATUM():
     return str(datetime.datetime.now())[8:10] + '.' + str(datetime.datetime.now())[5:7] + '.' + str(datetime.datetime.now())[:4]
@@ -102,7 +103,12 @@ class Nezgodno_zavarovanje:
             print('Zavarovanec potrjuje, da je prejel pogoje\nzavarovanja in je z njimi tudi seznanjen.\n', file=doc)
             print('Ljubljana, dne {}\n'.format(DANAŠNJI_DATUM()), file=doc)
             print('_________________________', file=doc)
-            
+        if sys.platform == 'darwin':
+            subprocess.call(['open','Nezgodno_zavarovanje_št_{}.txt'.format(self.številka)])
+        elif sys.platform == 'win32' or sys.platform == 'win64':
+            os.startfile('Nezgodno_zavarovanje_št_{}.txt'.format(self.številka))
+        else:
+            subprocess.call(['xdg-open','Nezgodno_zavarovanje_št_{}.txt'.format(self.številka)])
             
             
 
