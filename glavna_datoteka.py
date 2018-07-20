@@ -1,13 +1,48 @@
 import subprocess, os, sys
 import datetime
-def DANAŠNJI_DATUM():
-    return str(datetime.datetime.now())[8:10] + '.' + str(datetime.datetime.now())[5:7] + '.' + str(datetime.datetime.now())[:4]
 TRAJANJA = {1: 1, 5: 0.95, 10: 0.85}
 PAKETI = {'velik': 200, 'majhen': 150}
+ŠTEVILKE = '0123456789'
 
+def DANAŠNJI_DATUM():
+    return str(datetime.datetime.now())[8:10] + '.' + str(datetime.datetime.now())[5:7] + '.' + str(datetime.datetime.now())[:4]
 
+def vsebuje_številke(niz):
+    for i in ŠTEVILKE:
+        if i in niz:
+            return True
+    return False
 
-class Stranka:        
+#funkcije da preverim če je datum rojstva veljaven
+def prestopno(leto):
+    return leto % 4 == 0 and leto % 100 != 0 or leto % 400 == 0
+
+def stevilo_dni(mesec, leto):
+    if mesec == 2 and prestopno(leto):
+        return 29
+    elif mesec == 2:
+        return 28
+    elif mesec == 4 or mesec == 6 or mesec == 9 or mesec == 11:
+        return 30
+    else:
+        return 31
+
+def je_veljaven_datum(dan, mesec, leto):
+    for s in [dan, mesec, leto]:
+        for c in s:
+            if c not in ŠTEVILKE:
+                return False
+    dan = int(dan)
+    mesec = int(mesec)
+    leto = int(leto)
+    return 1<= mesec <= 12 and 1 <= dan <= stevilo_dni(mesec, leto) and 1900 <= leto <= 2018
+    
+        
+class Stranka:
+
+    def __init__(self):
+        self.ime = ''
+        self.priimek = ''
 
     def __repr__(self):
         return 'Stranka({}, {}, {})'.format(self.ime, self.priimek, self.datum_rojstva)
@@ -22,6 +57,11 @@ class Stranka:
         self.starost = int(DANAŠNJI_DATUM()[-4:]) - int(self.datum_rojstva[-4:])
 
 class Nezgodno_zavarovanje:
+
+    def __init__(self):
+        self.trajanje = None
+        self.paket = None
+        self.premija = None
 
     def __str__(self):
         return 'Nezgodno zavarovanje št. {}, lastnik: {}'.format(self.številka, self.lastnik)
@@ -59,32 +99,35 @@ class Nezgodno_zavarovanje:
         self.premija = TRAJANJA.get(self.trajanje) * k * PAKETI.get(self.paket) * self.trajanje
         if self.interval_plačevanja == 'mesečno':
             self.plačilo = self.premija / self.trajanje / 12
-            return 'Vaše mesečno plačilo je {}'.format(self.plačilo)
+            return 'Vaše mesečno plačilo je {:.2f}'.format(self.plačilo)
         else:
             self.plačilo = self.premija / self.trajanje
-            return 'Vaše letno plačilo je {}'.format(self.plačilo)
+            return 'Vaše letno plačilo je {:.2f}'.format(self.plačilo)
 
     def ustvari_zavarovanje(self):
-        #ustvari dat sklenjena zavarovanja oz. dodaj vanjo podatke o zavarovanju
-        with open('sklenjena_zavarovanja.txt', 'a', encoding='latin2') as sklenjena_zavarovanja:
-            sklenjena_zavarovanja.write('{}: Nezgodno zavarovanje, {}, {}, {}, {}, {} {}, {}\n'.format(self.številka, self.trajanje, self.paket, self.interval_plačevanja, self.premija, self.lastnik.ime, self.lastnik.priimek, self.datum_sklenitve))
-        
-        #ustvari datoteko baza oseb oz. dodaj vanjo podatke o stranki (če je to prvo sklenjeno zavarovanje te stranke) oz. dodaj št. zavarovanja k stranki (lastniku zavarovanja)
-        with open('baza_oseb.txt', 'a', encoding='latin2') as baza_oseb:
-            pass  #če datoteka še ne obstaja se ustvari tukaj
-        with open('baza_oseb.txt') as baza_oseb:
-            osebe = baza_oseb.readlines()
-        lastnika_ni_v_bazi = True
-        for i in range(len(osebe)):
-            if osebe[i].startswith('{}, {}, {}'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.datum_rojstva)):
-                osebe[i] = osebe[i].strip() + ', {}\n'.format(self.številka)
-                lastnika_ni_v_bazi = False
-                break
-        if lastnika_ni_v_bazi:
-            osebe += ['{}, {}, {}: {}\n'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.datum_rojstva, self.številka)]
-        with open('baza_oseb.txt', 'w', encoding='latin2') as baza_oseb:
-            for vrstica in osebe:
-                baza_oseb.write(vrstica)
+        if self.premija == None: 
+            pass #to sem dodala zato da ni težav pri gumbu ustvari zavarovanje v uporabniškem vmesniku
+        else:
+            #ustvari dat sklenjena zavarovanja oz. dodaj vanjo podatke o zavarovanju
+            with open('sklenjena_zavarovanja.txt', 'a', encoding='latin2') as sklenjena_zavarovanja:
+                sklenjena_zavarovanja.write('{}: Nezgodno zavarovanje, {}, {}, {}, {:.2f}, {} {}, {}\n'.format(self.številka, self.trajanje, self.paket, self.interval_plačevanja, self.premija, self.lastnik.ime, self.lastnik.priimek, self.datum_sklenitve))
+            
+            #ustvari datoteko baza oseb oz. dodaj vanjo podatke o stranki (če je to prvo sklenjeno zavarovanje te stranke) oz. dodaj št. zavarovanja k stranki (lastniku zavarovanja)
+            with open('baza_oseb.txt', 'a', encoding='latin2') as baza_oseb:
+                pass  #če datoteka še ne obstaja se ustvari tukaj
+            with open('baza_oseb.txt', encoding='latin2') as baza_oseb:
+                osebe = baza_oseb.readlines()
+            lastnika_ni_v_bazi = True
+            for i in range(len(osebe)):
+                if osebe[i].startswith('{}, {}, {}'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.datum_rojstva)):
+                    osebe[i] = osebe[i].strip() + ', {}\n'.format(self.številka)
+                    lastnika_ni_v_bazi = False
+                    break
+            if lastnika_ni_v_bazi:
+                osebe += ['{}, {}, {}: {}\n'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.datum_rojstva, self.številka)]
+            with open('baza_oseb.txt', 'w', encoding='latin2') as baza_oseb:
+                for vrstica in osebe:
+                    baza_oseb.write(vrstica)
 
     def ustvari_dokument(self):
         #ustvari in odpre dokument (zavarovalno polico), ki ga naj bi ga zavarovalniški posrednik dal podpisati stranki
@@ -116,6 +159,13 @@ class Nezgodno_zavarovanje:
             os.startfile('Nezgodno_zavarovanje_št_{}.txt'.format(self.številka))
         else:
             subprocess.call(['xdg-open','Nezgodno_zavarovanje_št_{}.txt'.format(self.številka)])
+
+    def ponastavi_podatke(self):
+        self.trajanje = None
+        self.paket = None
+        self.premija = None
+        self.lastnik.ime = ''
+        self.lastnik.priimek = ''
             
             
 
