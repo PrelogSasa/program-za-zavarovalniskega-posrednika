@@ -56,6 +56,10 @@ class Stranka:
         self.datum_rojstva = datum_rojstva
         self.starost = int(DANAŠNJI_DATUM()[-4:]) - int(self.datum_rojstva[-4:])
 
+    def ponastavi_podatke(self):
+        self.ime = ''
+        self.priimek = ''
+
 class Nezgodno_zavarovanje:
 
     def __init__(self):
@@ -164,29 +168,3 @@ class Nezgodno_zavarovanje:
         self.trajanje = None
         self.paket = None
         self.premija = None
-        self.lastnik.ime = ''
-        self.lastnik.priimek = ''
-            
-            
-
-##    Maja = Stranka()
-##    Maja.nastavi_ime_priimek_datum_rojstva('Domen', 'Grzin', '06.06.1998')
-##    Zavarovanje1 = Nezgodno_zavarovanje()
-##    Zavarovanje1.nastavi_številko()
-##    Zavarovanje1.nastavi_trajanje(10)
-##    Zavarovanje1.nastavi_paket('velik')
-##    Zavarovanje1.nastavi_lastnika(Maja)
-##    Zavarovanje1.nastavi_premijo('letno')
-##    Zavarovanje1.ustvari_zavarovanje()
-##    Zavarovanje1.ustvari_dokument()
-##    Domen = Stranka()
-##    Domen.nastavi_ime_priimek_datum_rojstva('Vladimir', 'Putin', '23.12.1965')
-##    Zavarovanje2= Nezgodno_zavarovanje()
-##    Zavarovanje2.nastavi_številko()
-##    Zavarovanje2.nastavi_trajanje(10)
-##    Zavarovanje2.nastavi_paket('velik')
-##    Zavarovanje2.nastavi_lastnika(Domen)
-##    Zavarovanje2.nastavi_premijo('mesečno')
-##    Zavarovanje2.ustvari_zavarovanje()
-##    Zavarovanje2.ustvari_dokument()
-
