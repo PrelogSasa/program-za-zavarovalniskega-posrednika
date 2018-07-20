@@ -29,6 +29,8 @@ def stevilo_dni(mesec, leto):
 
 def je_veljaven_datum(dan, mesec, leto):
     for s in [dan, mesec, leto]:
+        if s == '':
+            return False
         for c in s:
             if c not in ŠTEVILKE:
                 return False
