@@ -7,13 +7,7 @@ PAKETI = {'velik': 200, 'majhen': 150}
 
 
 
-class Stranka:
-    def nastavi_ime_priimek_datum_rojstva(self, ime, priimek, datum_rojstva):
-        self.ime = ime
-        self.priimek = priimek
-        self.datum_rojstva = datum_rojstva
-        self.starost = int(DANAŠNJI_DATUM()[-4:]) - int(self.datum_rojstva[-4:])
-        
+class Stranka:        
 
     def __repr__(self):
         return 'Stranka({}, {}, {})'.format(self.ime, self.priimek, self.datum_rojstva)
@@ -21,10 +15,22 @@ class Stranka:
     def __str__(self):
         return '{} {}, rojen/a: {}'.format(self.ime, self.priimek, self.datum_rojstva)
 
+    def nastavi_ime_priimek_datum_rojstva(self, ime, priimek, datum_rojstva):
+        self.ime = ime
+        self.priimek = priimek
+        self.datum_rojstva = datum_rojstva
+        self.starost = int(DANAŠNJI_DATUM()[-4:]) - int(self.datum_rojstva[-4:])
 
 class Nezgodno_zavarovanje:
 
+    def __str__(self):
+        return 'Nezgodno zavarovanje št. {}, lastnik: {}'.format(self.številka, self.lastnik)
+
+    def __repr__(self):
+        return 'Nezgodno_zavarovanje({}, {})'.format(self.trajanje, self.paket)
+
     def nastavi_številko(self):
+        #nastavi datum sklenitve in številko zavarovanja, ki je unikatna vsakemu zavarovanju
         self.datum_sklenitve = DANAŠNJI_DATUM()
         with open('številka_zavarovanja.txt') as dat:
             številka_zavarovanja = dat.readline()
@@ -40,16 +46,11 @@ class Nezgodno_zavarovanje:
     def nastavi_paket(self, paket):
         self.paket = paket
 
-    def __str__(self):
-        return 'Nezgodno zavarovanje št. {}, lastnik: {}'.format(self.številka, self.lastnik)
-
-    def __repr__(self):
-        return 'Nezgodno_zavarovanje({}, {})'.format(self.trajanje, self.paket)
-        
     def nastavi_lastnika(self, stranka):
         self.lastnik = stranka
     
     def nastavi_premijo(self, interval_plačevanja):
+        #izračuna višino premije glede na starost stranke, trajanje in paket zavarovanja in izračuna kolikšno je mesečno/letno plačilo
         self.interval_plačevanja = interval_plačevanja
         if self.lastnik.starost >= 65:
             k = 1.2
@@ -64,13 +65,13 @@ class Nezgodno_zavarovanje:
             return 'Vaše letno plačilo je {}'.format(self.plačilo)
 
     def ustvari_zavarovanje(self):
-        #ustvari oz. dodaj v datoteko sklenjena zavarovanje
+        #ustvari dat sklenjena zavarovanja oz. dodaj vanjo podatke o zavarovanju
         with open('sklenjena_zavarovanja.txt', 'a', encoding='latin2') as sklenjena_zavarovanja:
             sklenjena_zavarovanja.write('{}: Nezgodno zavarovanje, {}, {}, {}, {}, {} {}, {}\n'.format(self.številka, self.trajanje, self.paket, self.interval_plačevanja, self.premija, self.lastnik.ime, self.lastnik.priimek, self.datum_sklenitve))
         
-        #ustvari novo oz. dodaj v bazo oseb
+        #ustvari datoteko baza oseb oz. dodaj vanjo podatke o stranki (če je to prvo sklenjeno zavarovanje te stranke) oz. dodaj št. zavarovanja k stranki (lastniku zavarovanja)
         with open('baza_oseb.txt', 'a', encoding='latin2') as baza_oseb:
-            pass
+            pass  #če datoteka še ne obstaja se ustvari tukaj
         with open('baza_oseb.txt') as baza_oseb:
             osebe = baza_oseb.readlines()
         lastnika_ni_v_bazi = True
@@ -86,6 +87,7 @@ class Nezgodno_zavarovanje:
                 baza_oseb.write(vrstica)
 
     def ustvari_dokument(self):
+        #ustvari in odpre dokument (zavarovalno polico), ki ga naj bi ga zavarovalniški posrednik dal podpisati stranki
         with open('Nezgodno_zavarovanje_št_{}.txt'.format(self.številka), 'w', encoding='latin2') as doc:
             print('POLICA ZA NEZGODNO ZAVAROVANJE\n', file=doc)
             print('Polica št. {}\n'.format(self.številka), file=doc)
@@ -107,6 +109,7 @@ class Nezgodno_zavarovanje:
             print('Zavarovanec potrjuje, da je prejel pogoje\nzavarovanja in je z njimi tudi seznanjen.\n', file=doc)
             print('Ljubljana, dne {}\n'.format(DANAŠNJI_DATUM()), file=doc)
             print('_________________________', file=doc)
+        #ker so za različne sisteme potrebni različni ukazi za odpiranje datoteke sem vključila 3 možnosti: prva za apple, druga za windows in tretja za linux 
         if sys.platform == 'darwin':
             subprocess.call(['open','Nezgodno_zavarovanje_št_{}.txt'.format(self.številka)])
         elif sys.platform == 'win32':
@@ -116,24 +119,24 @@ class Nezgodno_zavarovanje:
             
             
 
-##Maja = Stranka()
-##Maja.nastavi_ime_priimek_datum_rojstva('Domen', 'Grzin', '06.06.1998')
-##Zavarovanje1 = Nezgodno_zavarovanje()
-##Zavarovanje1.nastavi_številko()
-##Zavarovanje1.nastavi_trajanje(10)
-##Zavarovanje1.nastavi_paket('velik')
-##Zavarovanje1.nastavi_lastnika(Maja)
-##Zavarovanje1.nastavi_premijo('letno')
-##Zavarovanje1.ustvari_zavarovanje()
-##Zavarovanje1.ustvari_dokument()
-##Domen = Stranka()
-##Domen.nastavi_ime_priimek_datum_rojstva('Vladimir', 'Putin', '23.12.1965')
-##Zavarovanje2= Nezgodno_zavarovanje()
-##Zavarovanje2.nastavi_številko()
-##Zavarovanje2.nastavi_trajanje(10)
-##Zavarovanje2.nastavi_paket('velik')
-##Zavarovanje2.nastavi_lastnika(Domen)
-##Zavarovanje2.nastavi_premijo('mesečno')
-##Zavarovanje2.ustvari_zavarovanje()
-##Zavarovanje2.ustvari_dokument()
-##
+##    Maja = Stranka()
+##    Maja.nastavi_ime_priimek_datum_rojstva('Domen', 'Grzin', '06.06.1998')
+##    Zavarovanje1 = Nezgodno_zavarovanje()
+##    Zavarovanje1.nastavi_številko()
+##    Zavarovanje1.nastavi_trajanje(10)
+##    Zavarovanje1.nastavi_paket('velik')
+##    Zavarovanje1.nastavi_lastnika(Maja)
+##    Zavarovanje1.nastavi_premijo('letno')
+##    Zavarovanje1.ustvari_zavarovanje()
+##    Zavarovanje1.ustvari_dokument()
+##    Domen = Stranka()
+##    Domen.nastavi_ime_priimek_datum_rojstva('Vladimir', 'Putin', '23.12.1965')
+##    Zavarovanje2= Nezgodno_zavarovanje()
+##    Zavarovanje2.nastavi_številko()
+##    Zavarovanje2.nastavi_trajanje(10)
+##    Zavarovanje2.nastavi_paket('velik')
+##    Zavarovanje2.nastavi_lastnika(Domen)
+##    Zavarovanje2.nastavi_premijo('mesečno')
+##    Zavarovanje2.ustvari_zavarovanje()
+##    Zavarovanje2.ustvari_dokument()
+
