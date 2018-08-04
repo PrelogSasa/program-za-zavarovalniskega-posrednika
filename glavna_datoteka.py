@@ -13,7 +13,7 @@ def vsebuje_številke(niz):
             return True
     return False
 
-#funkcije da preverim če je datum rojstva veljaven
+# pomožne funkcije da preverim če je datum rojstva veljaven
 def prestopno(leto):
     return leto % 4 == 0 and leto % 100 != 0 or leto % 400 == 0
 
@@ -37,8 +37,20 @@ def je_veljaven_datum(dan, mesec, leto):
     dan = int(dan)
     mesec = int(mesec)
     leto = int(leto)
-    return 1<= mesec <= 12 and 1 <= dan <= stevilo_dni(mesec, leto) and 1900 <= leto <= 2018
-    
+    return 1<= mesec <= 12 and 1 <= dan <= stevilo_dni(mesec, leto) and 1900 <= leto <= int(str(datetime.datetime.now())[:4])
+
+def odpri_dokument(ime):
+    #če datoteka še ne obstaja se ustvari tukaj
+    with open(ime, 'a', encoding='latin2') as doc:
+        pass 
+    #ker so za različne sisteme potrebni različni ukazi za odpiranje datoteke sem vključila 3 možnosti:
+    #prva za apple, druga za windows in tretja za linux
+    if sys.platform == 'darwin':
+        subprocess.call(['open',ime])
+    elif sys.platform == 'win32':
+        os.startfile(ime)
+    else:
+        subprocess.call(['xdg-open',ime])
         
 class Stranka:
 
@@ -114,7 +126,7 @@ class Nezgodno_zavarovanje:
         if self.premija == None: 
             pass #to sem dodala zato da ni težav pri gumbu ustvari zavarovanje v uporabniškem vmesniku
         else:
-            #ustvari dat sklenjena zavarovanja oz. dodaj vanjo podatke o zavarovanju
+            #ustvari datoteko sklenjena zavarovanja oz. doda vanjo podatke o zavarovanju
             with open('sklenjena_zavarovanja.txt', 'a', encoding='latin2') as sklenjena_zavarovanja:
                 sklenjena_zavarovanja.write('{}: Nezgodno zavarovanje, {}, {}, {}, {:.2f}, {} {}, {}\n'.format(self.številka, self.trajanje, self.paket, self.interval_plačevanja, self.premija, self.lastnik.ime, self.lastnik.priimek, self.datum_sklenitve))
             
@@ -122,17 +134,17 @@ class Nezgodno_zavarovanje:
             with open('baza_oseb.txt', 'a', encoding='latin2') as baza_oseb:
                 pass  #če datoteka še ne obstaja se ustvari tukaj
             with open('baza_oseb.txt', encoding='latin2') as baza_oseb:
-                osebe = baza_oseb.readlines()
+                vrstice = baza_oseb.readlines()
             lastnika_ni_v_bazi = True
-            for i in range(len(osebe)):
-                if osebe[i].startswith('{}, {}, {}'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.datum_rojstva)):
-                    osebe[i] = osebe[i].strip() + ', {}\n'.format(self.številka)
+            for i in range(len(vrstice)):
+                if vrstice[i].startswith('{}, {}, {}'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.datum_rojstva)):
+                    vrstice[i] = vrstice[i].strip() + ', {}\n'.format(self.številka)
                     lastnika_ni_v_bazi = False
                     break
             if lastnika_ni_v_bazi:
-                osebe += ['{}, {}, {}: {}\n'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.datum_rojstva, self.številka)]
+                vrstice += ['{}, {}, {}: {}\n'.format(self.lastnik.ime, self.lastnik.priimek, self.lastnik.datum_rojstva, self.številka)]
             with open('baza_oseb.txt', 'w', encoding='latin2') as baza_oseb:
-                for vrstica in osebe:
+                for vrstica in vrstice:
                     baza_oseb.write(vrstica)
 
     def ustvari_dokument(self):
@@ -158,13 +170,7 @@ class Nezgodno_zavarovanje:
             print('Zavarovanec potrjuje, da je prejel pogoje\nzavarovanja in je z njimi tudi seznanjen.\n', file=doc)
             print('Ljubljana, dne {}\n'.format(DANAŠNJI_DATUM()), file=doc)
             print('_________________________', file=doc)
-        #ker so za različne sisteme potrebni različni ukazi za odpiranje datoteke sem vključila 3 možnosti: prva za apple, druga za windows in tretja za linux 
-        if sys.platform == 'darwin':
-            subprocess.call(['open','Nezgodno_zavarovanje_št_{}.txt'.format(self.številka)])
-        elif sys.platform == 'win32':
-            os.startfile('Nezgodno_zavarovanje_št_{}.txt'.format(self.številka))
-        else:
-            subprocess.call(['xdg-open','Nezgodno_zavarovanje_št_{}.txt'.format(self.številka)])
+        odpri_dokument('Nezgodno_zavarovanje_št_{}.txt'.format(self.številka))
 
     def ponastavi_podatke(self):
         self.trajanje = None

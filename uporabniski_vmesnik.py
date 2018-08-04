@@ -3,9 +3,9 @@ from tkinter import Tk, Frame, Button, Label, Radiobutton, IntVar, StringVar, BO
 from glavna_datoteka import *
 
 NZ = Nezgodno_zavarovanje() #ustvarim objekt za nezgodno zavarovanje in mu skozi uporabniški vmesnik dodajam atribute
-OS = Stranka() # ustvarim objekt stranka in ji skozi uporabniški vmesnik dodajam atribute
+OS = Stranka() # ustvarim objekt stranka in mu skozi uporabniški vmesnik dodajam atribute
 
-#različne strani (z različnimi gumbi) prikažem tako, da je vsaka stran en Frame in vsi so drug nad drugim in ko želim prikazati naslednjo stran dvignem ustrezen Frame na vrh.
+#različne strani (z različnimi gumbi) prikažem tako, da je vsaka stran posamezen Frame in vsi so drug nad drugim. Ko želim prikazati naslednjo stran dvignem ustrezen Frame na vrh.
 def naslednja_stran(stran):
     if stran == stran3 and (NZ.trajanje == None or NZ.paket == None):
         messagebox.showerror('Napaka', 'Preden lahko nadaljujete morate izbrati trajanje in paket zavarovanja!')
@@ -17,18 +17,18 @@ def naslednja_stran(stran):
         messagebox.showerror('Napaka', 'Preden lahko nadaljujete morate izbrati dinamiko plačevanja in pritisniti gumb Izračunaj!')
     else:
         stran.tkraise()
-        a.deselect() # za stran 2
-        b.deselect()
-        c.deselect()
-        k.deselect()
-        l.deselect()
+        trajanje1.deselect() # za stran 2
+        trajanje5.deselect()
+        trajanje10.deselect()
+        paketm.deselect()
+        paketv.deselect()
         ime.delete(0, last=20) # za stran 3
         priimek.delete(0, last=20)
         dan.delete(0, last=2)
         mesec.delete(0, last=2)
         leto.delete(0, last=4)
-        m.deselect() # za stran 4
-        n.deselect()
+        dinamikam.deselect() # za stran 4
+        dinamikal.deselect()
         izpis.config(text='')
 
 #funkcija za gumb Shrani na strani 3
@@ -55,25 +55,29 @@ for stran in [stran1, stran2, stran3, stran4, stran5]:
     stran.grid(row=0, column=0, sticky='NEWS')
     
 
-#stran1    
+#stran1 (glavni meni)   
 Button(stran1, text='Skleni novo nezgodno zavarovanje', command=lambda:[naslednja_stran(stran2), NZ.nastavi_številko()]).pack()
+
+Button(stran1, text='Odpri bazo oseb', command=lambda:odpri_dokument('baza_oseb.txt')).pack()
+
+Button(stran1, text='Preglej sklenjena zavarovanja', command=lambda:odpri_dokument('sklenjena_zavarovanja.txt')).pack()
 
 #stran 2 (zavarovanju nastavim atributa trajanje in paket)
 var1 = IntVar()   #to poveže gumbe s to variable v eno skupino torej lahko izbereš samo enega izmed njih
 Label(stran2, text='Trajanje nezgodnega zavarovanja:').pack()
-a = Radiobutton(stran2, text='1 leto', variable=var1, value=1, command=lambda:NZ.nastavi_trajanje(1))
-a.pack()
-b = Radiobutton(stran2, text='5 let', variable=var1, value=5, command=lambda:NZ.nastavi_trajanje(5))
-b.pack()
-c = Radiobutton(stran2, text='10 let', variable=var1, value=10, command=lambda:NZ.nastavi_trajanje(10))
-c.pack()
+trajanje1 = Radiobutton(stran2, text='1 leto', variable=var1, value=1, command=lambda:NZ.nastavi_trajanje(1))
+trajanje1.pack()
+trajanje5 = Radiobutton(stran2, text='5 let', variable=var1, value=5, command=lambda:NZ.nastavi_trajanje(5))
+trajanje5.pack()
+trajanje10 = Radiobutton(stran2, text='10 let', variable=var1, value=10, command=lambda:NZ.nastavi_trajanje(10))
+trajanje10.pack()
 
 var2 = StringVar()
 Label(stran2, text='Paket nezgodnega zavarovanja:').pack()
-k = Radiobutton(stran2, text='majhen', variable=var2, value='majhen', command=lambda:NZ.nastavi_paket('majhen'))
-k.pack()
-l = Radiobutton(stran2, text='velik', variable=var2, value='velik', command=lambda:NZ.nastavi_paket('velik'))
-l.pack()
+paketm = Radiobutton(stran2, text='majhen', variable=var2, value='majhen', command=lambda:NZ.nastavi_paket('majhen'))
+paketm.pack()
+paketv = Radiobutton(stran2, text='velik', variable=var2, value='velik', command=lambda:NZ.nastavi_paket('velik'))
+paketv.pack()
 
 Button(stran2, text='Naslednja stran >>', command=lambda:naslednja_stran(stran3)).pack(side=BOTTOM)
 
@@ -104,14 +108,14 @@ Button(stran3, text='Naslednja stran >>', command=lambda:[naslednja_stran(stran4
 
 Button(stran3, text='Nazaj na glavni meni', command=lambda:[naslednja_stran(stran1), NZ.ponastavi_podatke(), OS.ponastavi_podatke()]).grid(column=1, row=4)
 
-#stran 4 (nastavi (in izračuna) atribute interval plačevanja, premija in mesečno/letno plačilo)
+#stran 4 (izračuna in nastavi atribute interval plačevanja, premija in mesečno/letno plačilo)
 Label(stran4, text='Izberite dinamiko plačevanja:').pack()
 
 var3 = StringVar()
-m = Radiobutton(stran4, text='mesečno', variable=var3, value='mesečno')
-m.pack()
-n = Radiobutton(stran4, text='letno', variable=var3, value='letno')
-n.pack()
+dinamikam = Radiobutton(stran4, text='mesečno', variable=var3, value='mesečno')
+dinamikam.pack()
+dinamikal = Radiobutton(stran4, text='letno', variable=var3, value='letno')
+dinamikal.pack()
 
 Button(stran4, text='Izračunaj', command=lambda: izpis.config(text=NZ.nastavi_premijo(var3.get()))).pack()
 izpis = Label(stran4)
